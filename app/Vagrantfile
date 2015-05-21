@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "i2b2app"
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+
+  config.vm.provision :shell, :inline => "apt-get -y install git; cd ~; git clone https://github.com/bp2014n2/i2b2.git; cd i2b2; ./setup.sh"
+end
