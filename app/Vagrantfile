@@ -5,9 +5,16 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/trusty64"
 
-  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.ssh.username = "ubuntu"
+
+  config.vm.box_url = "http://54.93.194.56/vagrant/i2b2app.box"
+
+  config.vm.box = "i2b2app"
+
+  config.vm.network "public_network"
+
+  config.vm.hostname = "i2b2app"
 
   config.vm.provider "virtualbox" do |vb|
     vb.name = "i2b2app"
@@ -15,5 +22,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.cpus = 2
   end
 
-  config.vm.provision :shell, :inline => "apt-get -y install git; cd ~; git clone https://github.com/bp2014n2/i2b2.git; cd i2b2; ./setup.sh"
+  config.vm.provision :shell, :inline => "sudo apt-get -y install git; cd ~; git clone https://github.com/bp2014n2/i2b2.git; cd i2b2; ./setup.sh core web", privileged: false
 end

@@ -5,15 +5,22 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/trusty64"
+
+  config.ssh.username = "ubuntu"
+
+  config.vm.box_url = "http://54.93.194.56/vagrant/i2b2db.box"
+
+  config.vm.box = "i2b2db"
 
   config.vm.network "public_network"
 
+  config.vm.hostname = "i2b2db"
+
   config.vm.provider "virtualbox" do |vb|
     vb.name = "i2b2db"
-    vb.memory = 8192
+    vb.memory = 4096
     vb.cpus = 2
   end
 
-  config.vm.provision :shell, :inline => 'echo "install script pending"'
+  config.vm.provision :shell, :inline => "echo 'comming soon'", privileged: false
 end
