@@ -15,5 +15,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.cpus = 4
   end
 
-  config.vm.provision :shell, :inline => 'echo "install script pending"'
+  config.vm.provision :shell, :inline => 'echo "install script pending";'
 end

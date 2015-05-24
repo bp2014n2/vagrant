@@ -22,5 +22,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.cpus = 2
   end
 
-  config.vm.provision :shell, :inline => "echo 'comming soon'", privileged: false
+  config.vm.provision :shell, :inline => "echo 'comming soon';", privileged: false
 end
