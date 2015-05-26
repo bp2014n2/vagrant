@@ -12,7 +12,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "i2b2app"
 
-  config.vm.network "public_network"
+  config.vm.network "private_network", type: "dhcp"
+
+  config.vm.network "forwarded_port", guest: 80, host: 8080
 
   config.vm.hostname = "i2b2app"
 
@@ -25,5 +27,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :inline => "sudo apt-get -y install git; cd ~; git clone https://github.com/bp2014n2/i2b2.git;", privileged: false
   config.vm.provision "file", source: "env.properties", destination: "~/i2b2/env.properties"
   config.vm.provision :shell, :inline => "cd ~/i2b2; sudo ./setup.sh core web;", privileged: false
+  config.vm.provision :shell, :inline => "sudo service jboss restart;"
   config.vm.provision :shell, :inline => "echo \"Machine reachable via `ifconfig eth1 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1`\"", privileged: false
 end

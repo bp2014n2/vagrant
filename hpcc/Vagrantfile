@@ -5,15 +5,72 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/trusty64"
+  
+  config.vm.define "master" do |master|
+    
+    master.ssh.username = "ubuntu"
 
-  config.vm.network "public_network"
+    master.vm.box_url = "http://54.93.194.56/vagrant/i2b2db.box"
 
-  config.vm.provider "virtualbox" do |vb|
-    vb.name = "i2b2hpcc"
-    vb.memory = 16384
-    vb.cpus = 4
+    master.vm.box = "i2b2db"
+
+    master.vm.network "private_network", type: "dhcp"
+
+    master.vm.hostname = "i2b2hpccm"
+
+    master.vm.provider "virtualbox" do |vb|
+      vb.name = "i2b2hpccm"
+      vb.memory = 2048
+      vb.cpus = 1
+    end
+
+    master.vm.provision "shell", path: "setup.sh"
+    master.vm.provision :shell, :inline => "echo \"Machine reachable via `ifconfig eth1 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1`\"", privileged: false
+
   end
 
-  config.vm.provision :shell, :inline => 'echo "install script pending";'
+  config.vm.define "worker1" do |worker|
+    
+    worker.ssh.username = "ubuntu"
+
+    worker.vm.box_url = "http://54.93.194.56/vagrant/i2b2db.box"
+
+    worker.vm.box = "i2b2db"
+
+    worker.vm.network "private_network", type: "dhcp"
+
+    worker.vm.hostname = "i2b2hpccw1"
+
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "i2b2hpccw1"
+      vb.memory = 2048
+      vb.cpus = 1
+    end
+
+    worker.vm.provision :shell, :inline => "echo \"Machine reachable via `ifconfig eth1 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1`\"", privileged: false
+
+  end
+
+  config.vm.define "worker2" do |worker|
+    
+    worker.ssh.username = "ubuntu"
+
+    worker.vm.box_url = "http://54.93.194.56/vagrant/i2b2db.box"
+
+    worker.vm.box = "i2b2db"
+
+    worker.vm.network "private_network", type: "dhcp"
+
+    worker.vm.hostname = "i2b2hpccw2"
+
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "i2b2hpccw2"
+      vb.memory = 2048
+      vb.cpus = 1
+    end
+
+    worker.vm.provision :shell, :inline => "echo \"Machine reachable via `ifconfig eth1 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1`\"", privileged: false
+
+  end
+
 end
