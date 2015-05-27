@@ -31,6 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     master.vm.provision "shell", path: "setup.sh"
+    master.vm.provision "load", type: "shell", path: "create_tables.sh"
     master.vm.provision :shell, :inline => "echo \"Machine reachable via `ifconfig eth1 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1`\"", privileged: false
 
   end
