@@ -30,8 +30,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.name = "i2b2hpccm"
     end
 
-    master.vm.provision "shell", path: "setup.sh"
-    master.vm.provision "load", type: "shell", path: "create_tables.sh"
+    master.vm.provision :shell, :inline => "sudo apt-get -y install git; cd ~; git clone https://github.com/bp2014n2/i2b2-db.git;", privileged: false
+    master.vm.provision :shell, :inline => "cd ~/i2b2-db; sudo ./setup_hpcc.sh;", privileged: false
+    master.vm.provision :shell, :inline => "cd ~; git clone https://github.com/bp2014n2/i2b2.git;", privileged: false
+    master.vm.provision "file", source: "env.properties", destination: "~/i2b2/env.properties"
+    # master.vm.provision :shell, :inline => "cd ~/i2b2; sudo ./setup.sh girix;", privileged: false
+    # master.vm.provision :shell, :inline => "sudo service jboss restart;"
+  
     master.vm.provision :shell, :inline => "echo \"Machine reachable via `ifconfig eth1 | grep 'inet addr:' | cut -d: -f2| cut -d' ' -f1`\"", privileged: false
 
   end
